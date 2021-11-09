@@ -5,17 +5,26 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <h2>Upload Image and Commpressed It</h2>
+    <body>
+      <div className="App">
+        <header className="head">
+          <h1>Image Compressor</h1>
+        </header>
+        
+        <br />
+        <section>
+          <div className="Show">
+            <ImgSelectWithPrevComponent/>
+          </div>
+        </section>
+        
 
-      <div className="Show">
-        <ImgSelectWithPrevComponent/>
+        <div className="Show">
+          <InputOnlyNumber />
+        </div>
       </div>
-
-      <div className="">
-        <InputOnlyNumber/>%
-      </div>
-    </div>
+    </body>
+    
   );
 }
 
