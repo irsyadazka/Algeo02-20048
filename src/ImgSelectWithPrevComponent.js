@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import logo from './tes.jpg';
+import axios from 'axios';
 
 class ImgSelectWithPrevComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            file: null
+            file: null,
+            searchNumber: ''
         }
         this.selectImg = this.selectImg.bind(this)
     }
@@ -14,6 +16,35 @@ class ImgSelectWithPrevComponent extends Component {
         this.setState({ 
             file: URL.createObjectURL(e.target.files[0])
         })
+    }
+
+    handleInputChange = (event) => {
+        const val = event.target.value;
+
+        if (event.target.validity.valid) this.setState({
+            searchNumber: event.target.value
+        });
+        else if (val === '' || val === '-') this.setState({
+            searchNumber: val
+        });
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault()
+        var searchNumber = this.state.searchNumber;
+
+        window.location.href = "https://youtube.com/results?search_query=" + searchNumber;
+
+        var hasil;
+        axios({
+            method: 'post',
+            url: `http://api.resmush.it/ws.php?img=$(file)&qlty=$(searchNumber)`,
+            responseType: 'stream'
+          })
+            .then(function (response) {
+              hasil = response.dest;
+              console.log(hasil);
+            });
     }
 
     render() {
