@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Ceviche+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@300;400;500;600;700&display=swap');
+
+body {
+    background-color: #CCCC99;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px dashed #000;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-color: #666633;
+    color: #C0C0C0;
+    font-family: 'Ceviche One', cursive !important; 
+    font-size: 40px !important;
+}
+
+h1 {
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.make-center {
+    display: flex;
+    justify-content: center;
+    margin-left: 60px;
+}
+
+.input-size {
+    height: 15px;
+    margin-left: 5px;
+}
+
+.make-center-2 {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.compress {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.input-ratio {
+    width: 5%;
+    text-align: center;
+    height: 15px;
+    font-size: 14px;
+    border: 1px solid #C0C0C0;
+    border-radius: 6px;
+}
+
+.make-center-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.make-center-4 {
+    display: flex;
+    justify-content: center;
+    border: 4.5px solid #666633;
+    border-radius: 10px;
+    padding: 10px 15px 10px 15px;
+    background-color: #CCCC80;
+    width: 450px;
+    height: 450px;
+}
+
+.img {
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    max-height: 400px;
+    display: inline-block;
+    border: 1px solid #777676;
+    border-radius: 10px;
+    margin-left: 3px;
+    margin-top: 20px;
+}
+
+.make-compress {
+    font-size: 25px;
+    font-style: italic;
+    font-weight: bold;
+}

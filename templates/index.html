@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Image Compression</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
+    </head>
+
+    <body>
+        <header>
+            <h1>Image Compression</h1>
+        </header>
+
+        <br />
+        
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="make-center">
+                Choose Your Image Here: 
+                <input class="input-size" type="file" name="insert-img" required />
+            </div>
+            
+            <div class="make-center-2">
+                <div class="compress">Enter Compression Ratio <b>(%)</b>:</div>
+                <input class="input-ratio" type="number" name="insert-ratio" required />
+            </div>
+            
+            <div class="make-center-2">
+                <input class="submit" type="submit" value="Compress" />
+            </div>
+            <br />
+        </form>
+        {% if filename == None %}
+        <div class="make-center-3">
+            <div class="make-center-4">
+                <img src="{{ url_for('static', filename='test.jpg') }}" alt="" />
+            </div>
+        </div>
+        {% else %}
+        <div class="make-center-2">
+            <div class="make-compress">
+                Before Compression
+            </div>
+        </div>
+        <div class="make-center-3">
+            <div class="make-center-4">
+                <div class="img">
+                    <img src="{{ url_for('static', filename=filename) }}" alt="" />
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <br /><br />
+
+        {% if filename == None %}
+        <div class="make-center-3">
+            <div class="make-center-4">
+                <img src="{{ url_for('static', filename='test.jpg') }}" alt="" />
+            </div>
+        </div>
+        {% else %}
+        <div class="make-center-2">
+            <div class="make-compress">
+                After Compression
+            </div>
+        </div>
+        <div class="make-center-3">
+            <div class="make-center-4">
+                <div class="img">
+                    <img src="{{ url_for('static', filename=filename) }}" alt="" />
+                </div>
+            </div>
+        </div>
+        <div class="make-center-2">
+            <form action="/save" method="post">
+                <input type="submit" value="Save Image" />
+            </form>
+        </div>
+        {% endif %}
+    </body>
+</html>
