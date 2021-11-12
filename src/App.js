@@ -1,6 +1,6 @@
 import React from 'react';
 import ImgSelectWithPrevComponent from './ImgSelectWithPrevComponent';
-import InputOnlyNumber from './InputOnlyNumber';
+// import InputOnlyNumber from './InputOnlyNumber';
 import "./App.css";
 
 function App() {
@@ -17,11 +17,6 @@ function App() {
             <ImgSelectWithPrevComponent/>
           </div>
         </section>
-        
-
-        <div className="Show">
-          <InputOnlyNumber />
-        </div>
       </div>
     </body>
     
