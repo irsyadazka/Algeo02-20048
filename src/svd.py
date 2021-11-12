@@ -72,29 +72,46 @@ def compress(u,sigma,v,ratio):
     vNow = v[0:ratio,:]
     return uNow,sigmaNow,vNow
 
+def pixelDifference(img1, img2):
+    dif = 0
+    pairs = zip(img1.getdata(), img2.getdata())
+    if len(img1.getbands()) == 1:
+        for p1,p2 in pairs :
+            if p1 != p2 :
+                dif = dif + 1
+    else:
+        for p1,p2 in pairs :
+            for c1,c2 in zip(p1,p2):
+                if c1 != c2 :
+                    dif = dif + 1
+    ncomponents = img1.size[0] * img1.size[1] * 3
+    print ("Difference (percentage):", (dif * 100) / ncomponents)
+
+def compressImage(filename,ratio):
+    img = Image.open(filename)
+    data = np.asarray(img)
+    data = data.astype(float)
+
+    r, g, b = data[:, :, 0], data[:, :, 1], data[:, :, 2]
+
+    rNow = svd(r,ratio)
+    rNow = np.clip(rNow,0,255)
+    rNow = Image.fromarray(rNow)
+    rNow = rNow.convert("L")
+    gNow = svd(g,ratio)
+    gNow = np.clip(gNow,0,255)
+    gNow = Image.fromarray(gNow)
+    gNow = gNow.convert("L")
+    bNow = svd(b,ratio)
+    bNow = np.clip(bNow,0,255)
+    bNow = Image.fromarray(bNow)
+    bNow = bNow.convert("L")
+
+    newImg = Image.merge("RGB", (rNow,gNow,bNow))
+    pixelDifference(img, newImg)
+    newImg.save("tesindo10persen.png")
+
 start = time.time()
-img = Image.open('ryujin.jpg')
-data = np.asarray(img)
-data = data.astype(float)
-
-r, g, b = data[:, :, 0], data[:, :, 1], data[:, :, 2]
-
-rNow = svd(r,1)
-rNow = np.clip(rNow,0,255)
-rNow = Image.fromarray(rNow)
-rNow = rNow.convert("L")
-gNow = svd(g,1)
-gNow = np.clip(gNow,0,255)
-gNow = Image.fromarray(gNow)
-gNow = gNow.convert("L")
-bNow = svd(b,1)
-bNow = np.clip(bNow,0,255)
-bNow = Image.fromarray(bNow)
-bNow = bNow.convert("L")
-
-
-newData = Image.merge("RGB", (rNow,gNow,bNow))
-imgplot = plt.imshow(newData)
+compressImage("indo.png",10)
 end = time.time()
 print(f"Runtime of the program is {end - start} detik")
-plt.show()
