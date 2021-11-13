@@ -58,19 +58,22 @@ def svd(A,ratio):
     S[:k, :k] = np.diag(Sv)
 
     #Membuat matriks untuk image baru dari tiga matriks yang sudah dikompresi
-    U,S,Vt = compress(U,S,Vt,ratio)
+    U,S,Vt,diff = compress(U,S,Vt,ratio)
     reconimage = np.dot(U, np.dot(S, Vt))
-    return reconimage
+    return reconimage,diff
     
 
 def compress(u,sigma,v,ratio):
     #Memperkecil ukuran matriks sesuai rasio terhdap banyaknya nilai eigen
+    m = len(u)
+    n = len(v[0])
     k = len(sigma)
     ratio = (ratio*k)//100
-    uNow = u[:,0:ratio]
-    sigmaNow = sigma[0:ratio,0:ratio]
-    vNow = v[0:ratio,:]
-    return uNow,sigmaNow,vNow
+    uNow = u[:,:ratio]
+    sigmaNow = sigma[:ratio,:ratio]
+    vNow = v[:ratio,:]
+    diff = ratio*(m+n+1)*100/(m*n)
+    return uNow,sigmaNow,vNow,diff
 
 def pixelDifference(img1, img2):
     dif = 0
@@ -89,29 +92,31 @@ def pixelDifference(img1, img2):
 
 def compressImage(filename,ratio):
     img = Image.open(filename)
+    img = img.convert("RGB")
     data = np.asarray(img)
     data = data.astype(float)
 
     r, g, b = data[:, :, 0], data[:, :, 1], data[:, :, 2]
 
-    rNow = svd(r,ratio)
+    rNow,rdiff = svd(r,ratio)
     rNow = np.clip(rNow,0,255)
     rNow = Image.fromarray(rNow)
     rNow = rNow.convert("L")
-    gNow = svd(g,ratio)
+    gNow,gdiff = svd(g,ratio)
     gNow = np.clip(gNow,0,255)
     gNow = Image.fromarray(gNow)
     gNow = gNow.convert("L")
-    bNow = svd(b,ratio)
+    bNow,bdiff = svd(b,ratio)
     bNow = np.clip(bNow,0,255)
     bNow = Image.fromarray(bNow)
     bNow = bNow.convert("L")
 
     newImg = Image.merge("RGB", (rNow,gNow,bNow))
-    pixelDifference(img, newImg)
-    newImg.save("tesindo10persen.png")
+    print ("Pixel Difference (percentage):", bdiff)
+    #pixelDifference(img, newImg)
+    newImg.save("newryujin.jpg")
 
 start = time.time()
-compressImage("indo.png",10)
+compressImage("ryujin.jpg",5)
 end = time.time()
 print(f"Runtime of the program is {end - start} detik")
