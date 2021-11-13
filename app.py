@@ -37,7 +37,8 @@ def upload():
         end = time.time()
         execute = round(end - start, 2)
         imgSave, imgExt = os.path.splitext(filename)
-        imgSave = f'com{imgSave}{imgExt}'
+        imgSave = f'{imgSave}com{imgExt}'
+        compressedName.save(os.path.join(app.config['UPLOAD_FOLDER'], imgSave))
         return render_template('index.html', filename=filename, timetaken=execute, ratio=diff)
     if 'file' not in request.files:
         print('bukan')
