@@ -88,12 +88,45 @@ def pixelDifference(img1, img2):
     ncomponents = img1.size[0] * img1.size[1] * 3
     print ("Difference (percentage):", (dif * 100) / ncomponents)
 
-def compressImage(filename,ratio):
+
+def compressImagePNG(filename,ratio):
+
+    img = Image.open(filename)
+    img = img.convert("RGBA")
+    data = np.asarray(img)
+    data = data.astype(float)
+
+
+    r, g, b, s = data[:, :, 0], data[:, :, 1], data[:, :, 2], data[:, :, 3]
+
+    rNow,rdiff = svd(r,ratio)
+    rNow = np.clip(rNow,0,255)
+    rNow = Image.fromarray(rNow)
+    rNow = rNow.convert("L")
+    gNow,gdiff = svd(g,ratio)
+    gNow = np.clip(gNow,0,255)
+    gNow = Image.fromarray(gNow)
+    gNow = gNow.convert("L")
+    bNow,bdiff = svd(b,ratio)
+    bNow = np.clip(bNow,0,255)
+    bNow = Image.fromarray(bNow)
+    bNow = bNow.convert("L")
+    s = Image.fromarray(s)
+    s = s.convert("L")
+
+    newImg = Image.merge("RGBA", (rNow,gNow,bNow,s))
+    print ("Pixel Difference (percentage):", bdiff)
+    #pixelDifference(img, newImg)
+    return newImg, round(bdiff, 2)
+
+
+def compressImagenonPNG(filename,ratio):
 
     img = Image.open(filename)
     img = img.convert("RGB")
     data = np.asarray(img)
     data = data.astype(float)
+
 
     r, g, b = data[:, :, 0], data[:, :, 1], data[:, :, 2]
 
@@ -115,7 +148,16 @@ def compressImage(filename,ratio):
     #pixelDifference(img, newImg)
     return newImg, round(bdiff, 2)
 
-# start = time.time()
-# compressImage("ryujin.jpg",5)
-# end = time.time()
-# print(f"Runtime of the program is {end - start} detik")
+
+def compressImage(filename, fileExt, ratio):
+    if fileExt == ".png":
+        compressedName, diff = compressImagePNG(filename, ratio)
+    else:
+        compressedName, diff = compressImagenonPNG(filename, ratio)
+    return compressedName, diff
+
+# file = 
+# filenameonly, fileExt = os.path.splitext(filename)
+# hasil, r = compressImage("/Users/arikrayi/Downloads/logo-ig-instagram-windows-phone-all-you-need-know-9.png",5)
+# hasil.show()
+
