@@ -1,49 +1,67 @@
-from flask import Flask, render_template, redirect, url_for, request, send_file
-import os
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-import io
-import cv2
+import os
+import urllib.request
+import svd as compress
+import time
 
 app = Flask(__name__)
-imageFile = None
-compressFile = None
-fileName = None
-fileExtension = None
-compressRatio = None
+execute = None
+compressedName = None
+diff = None
+
+UPLOAD_FOLDER = 'static/images'
+
+app.config['ENV'] = 'development'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
+def file_in(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
-def show():
-    return render_template('index.html', imgIn = None, imgCom = None)
+def initial():
+    return render_template('index.html', timetaken=0, ratio=0)
 
-@app.route('/upload', methods = ['POST'])
-def upload_image():
-    global imageFile, compressFile, fileName, fileExtension, compressRatio
+@app.route('/', methods = ['POST'])
+def upload():
+    global execute, compressedName, diff
 
-    try:
-        image = request.files['insert-img']
-        fileName, fileExtension = os.path.splitext(secure_filename(image.filename))
-        keepImage = io.BytesIO()
-        image.save(keepImage)
-        imageFile = cv2.imdecode(image, cv2.IM_UNCHANGED)
-    except:
-        pass
+    file = request.files['insert-img']
+    if file and file_in(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        k = int(request.form['insert-ratio'])
+        start = time.time()
+        compressedName, diff = compress.compressImage(f'{UPLOAD_FOLDER}/{filename}', k)
+        end = time.time()
+        execute = round(end - start, 2)
+        imgSave, imgExt = os.path.splitext(filename)
+        imgSave = f'com{imgSave}{imgExt}'
+        return render_template('index.html', filename=filename, timetaken=execute, ratio=diff)
+    if 'file' not in request.files:
+        print('bukan')
+        return redirect(request.url)
+    if 'file.filename' == '':
+        print('kosong')
+        return redirect(request.url)
+    else:
+        print('Error uploading')
+        return redirect(request.url)
 
-    try:
-        compressRatio = int(request.form['insert-ratio'])
-    except: 
-        compressRatio = 100
+@app.route('/display/<filename>')
+def display(filename):
+    return redirect(url_for('static', filename='images/' + filename), code=301)
 
-    return redirect('/compressing')
+@app.route('/display/<filename>/com')
+def display_com(filename):
+    imgSave, imgExt = os.path.splitext(filename)
+    imgSave = f'{imgSave}com{imgExt}'
 
-@app.route('/show', methods='GET')
-def show_image():
-    global imageFile, compressFile, fileName, fileExtension, compressRatio
+    return redirect(url_for('static', filename='images/' + imgSave), code=301)
 
-@app.route('/save', methods='POST')
-def save_image():
-    global imageFile, compressFile, fileName, fileExtension, compressRatio
 
-    byteCompress = cv2.imencode(fileExtension, compressFile)
+    
 
-    return send_file(io.BytesIO(byteCompress), saveAs=fileName+fileExtension)
-
+if __name__ == '__main__':
+    app.run(debug=True)
