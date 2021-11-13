@@ -13,7 +13,7 @@
 
         <br />
         
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="make-center">
                 Choose Your Image Here: 
                 <input class="input-size" type="file" name="insert-img" required />
@@ -29,10 +29,10 @@
             </div>
             <br />
         </form>
-        {% if filename == None %}
+        {% if imgIn == None %}
         <div class="make-center-3">
             <div class="make-center-4">
-                <img src="{{ url_for('static', filename='test.jpg') }}" alt="" />
+                <img src="{{ url_for('static', filename='images/tes.jpg') }}" alt="" />
             </div>
         </div>
         {% else %}
@@ -44,7 +44,7 @@
         <div class="make-center-3">
             <div class="make-center-4">
                 <div class="img">
-                    <img src="{{ url_for('static', filename=filename) }}" alt="" />
+                    <img src="{{ url_for('display_image', filename=filename) }}" alt="" />
                 </div>
             </div>
         </div>
@@ -52,13 +52,7 @@
 
         <br /><br />
 
-        {% if filename == None %}
-        <div class="make-center-3">
-            <div class="make-center-4">
-                <img src="{{ url_for('static', filename='test.jpg') }}" alt="" />
-            </div>
-        </div>
-        {% else %}
+        {% if imgCom != None %}
         <div class="make-center-2">
             <div class="make-compress">
                 After Compression
