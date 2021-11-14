@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
-import urllib.request
 import svd as compress
 import time
 
@@ -31,25 +30,16 @@ def upload():
     if file and file_in(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        k = int(request.form['insert-ratio'])
+        rate = int(request.form['insert-ratio'])
         start = time.time()
         filenameonly, fileExt = os.path.splitext(filename)
-        compressedName, diff = compress.compressImage(f'{UPLOAD_FOLDER}/{filename}', fileExt, k)
+        compressedName, diff = compress.compressImage(f'{UPLOAD_FOLDER}/{filename}', fileExt, rate)
         end = time.time()
         execute = round(end - start, 2)
         imgSave, imgExt = os.path.splitext(filename)
-        imgSave = f'{imgSave}com{imgExt}'
+        imgSave = f'com{imgSave}{imgExt}'
         compressedName.save(os.path.join(app.config['UPLOAD_FOLDER'], imgSave))
         return render_template('index.html', filename=filename, timetaken=execute, ratio=diff)
-    if 'file' not in request.files:
-        print('bukan')
-        return redirect(request.url)
-    if 'file.filename' == '':
-        print('kosong')
-        return redirect(request.url)
-    else:
-        print('Error uploading')
-        return redirect(request.url)
 
 @app.route('/display/<filename>')
 def display(filename):
@@ -58,12 +48,9 @@ def display(filename):
 @app.route('/display/<filename>/com')
 def display_com(filename):
     imgSave, imgExt = os.path.splitext(filename)
-    imgSave = f'{imgSave}com{imgExt}'
+    imgSave = f'com{imgSave}{imgExt}'
 
     return redirect(url_for('static', filename='images/' + imgSave), code=301)
-
-
-    
 
 if __name__ == '__main__':
     app.run(debug=True)

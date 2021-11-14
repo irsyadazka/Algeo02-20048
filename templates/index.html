@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Image Compression</title>
+        <title>Image Compression Zhong Xina</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
     </head>
 
@@ -20,55 +20,69 @@
             </div>
             
             <div class="make-center-2">
-                <div class="compress">Enter Compression Ratio <b>(%)</b>:</div>
+                <div class="compress">Enter Compression Rank <b>(%)</b>:</div>
                 <input class="input-ratio" type="number" name="insert-ratio" required />
             </div>
             
             <div class="make-center-2">
-                <input class="submit" type="submit" value="Compress" />
+                <input class="submit" type="submit" value="Compress Now" />
             </div>
-            <br />
         </form>
         
         {% if filename %}
-        <div class="make-center-2">
-            <div class="make-compress">
-                Before Compression
-            </div>
-        </div>
-        <div class="make-center-3">
-            <div class="make-center-4">
-                <div class="img">
-                    <img src="{{ url_for('display', filename=filename) }}" alt="" />
+        <div class="make-center-5">
+            <section>
+                <div class="make-center-2">
+                    <div class="make-compress">
+                        Before Compression
+                    </div>
                 </div>
-            </div>
-        </div>
-        <br /><br />
-        <div class="make-center-2">
-            <div class="make-compress">
-                After Compression
-            </div>
-        </div>
-        <div class="make-center-3">
-            <div class="make-center-4">
-                <div class="img">
-                    <img src="{{ url_for('display_com', filename=filename) }}" alt="" />
+                <div class="make-center-3">
+                    <div class="make-center-4">
+                        <div class="img">
+                            <img src="{{ url_for('display', filename=filename) }}" alt="" />
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
+            
+            <br /><br />
+
+            <section>
+               <div class="make-center-2">
+                    <div class="make-compress">
+                        After Compression
+                    </div>
+                </div>
+                <div class="make-center-3">
+                    <div class="make-center-4">
+                        <div class="img">
+                            <img src="{{ url_for('display_com', filename=filename) }}" alt="" />
+                        </div>
+                    </div>
+                </div> 
+            </section>
         </div>
+
+        <br />
+        
         <div class="make-center-2">
             <form action="/" method="get">
-                 <a href="{{ url_for('display_com', filename=filename) }}" download>Download</a>
+                <a href="{{ url_for('display_com', filename=filename) }}" download>Download Compressed Image</a>
             </form>
-        </div>
+        </div> 
+
+        <br />
+
         <div class="make-center-2">
-            <div>
+            <div class="info">
                 Time Taken: {{ timetaken }} seconds
             </div>
         </div>
-        <div class="make-center-2">
-            <div>
-                Test {{ ratio }}
+
+        <div class="make-center-2 no-margin-auto">
+            <div class="info">
+                Pixel Difference: {{ ratio }}% 
             </div>
         </div>
         {% endif %}
