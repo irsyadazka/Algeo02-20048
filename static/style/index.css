@@ -76,10 +76,10 @@ img {
     height: 100%;
     max-height: 400px;
     display: inline-block;
-    border: 1px solid #777676;
+    border: 0px solid #777676;
     border-radius: 10px;
     margin-left: 3.5px;
-    margin-top: 23px;
+    margin-top: 24.5px;
 }
 
 .make-compress {
